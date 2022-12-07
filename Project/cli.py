@@ -1,9 +1,9 @@
 def main_menu():
     options = {
-        '1': ('Option 1', adm_material),
-        '2': ('Option 2', list_material),
-        '3': ('Option 3', reg_material_withdraw),
-        '4': ('Option 4', reg_material_input),
+        '1': ('Manage Materials', man_material),
+        '2': ('List Materials', list_material),
+        '3': ('Record withdrawal of material', rec_material_withdraw),
+        '4': ('Register incoming material', rec_material_input),
         '5': ('Exit', exit_menu)
     }
     generate_menu(options, '5')
@@ -34,7 +34,7 @@ def execute_option(option, options):
     options[option][1]()
 
 
-def adm_material():
+def man_material():
     print('Has elegido la opción 1')
 
 
@@ -42,11 +42,11 @@ def list_material():
     print('Has elegido la opción 2')
 
 
-def reg_material_withdraw():
+def rec_material_withdraw():
     print('Has elegido la opción 3')
 
 
-def reg_material_input():
+def rec_material_input():
     print('Has elegido la opción 4')
 
 
