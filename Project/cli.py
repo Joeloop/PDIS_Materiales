@@ -1,3 +1,9 @@
+from sqlalchemy import insert
+import Database.db as db
+from models.material import Material
+from models.material_movement import MaterialMovement
+
+
 def main_menu():
     options = {
         '1': ('Manage Materials', submenu),
@@ -57,7 +63,15 @@ def rec_material_input():
 
 
 def add_mat():
-    pass
+    print()
+    name = input('Insert the name: ')
+    quantity = int(input('Insert quantity: '))
+    unit_price = int(input('Insert unit price: '))
+    material = Material(name, quantity, unit_price)
+    print(material.id)
+    db.session.add(material)
+    db.session.commit()
+    return 'Product added'
 
 
 def edit_mat():
