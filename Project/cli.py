@@ -1,25 +1,35 @@
 def main_menu():
     options = {
-        '1': ('Manage Materials', man_material),
+        '1': ('Manage Materials', submenu),
         '2': ('List Materials', list_material),
         '3': ('Record withdrawal of material', rec_material_withdraw),
         '4': ('Register incoming material', rec_material_input),
         '5': ('Exit', exit_menu)
     }
-    generate_menu(options, '5')
+    generate_menu('Main Menu', options, '5')
 
 
-def generate_menu(options, output_option):
+def generate_menu(name, options, output_option):
     option = None
     while option != output_option:
-        show_menu(options)
+        show_menu(name, options)
         option = read_option(options)
         execute_option(option, options)
         print()  # Only for a white line
 
 
-def show_menu(options):
+def submenu():
+    options = {
+        'a': ('Add Material ', add_mat),
+        'b': ('Edit Material', edit_mat),
+        'c': ('Delete Mateial', del_mat),
+        'd': ('Exit', exit_menu)
+    }
+    generate_menu('Material Menu', options, 'd')
 
+
+def show_menu(name, options):
+    print(f'# {name}. Choose an option: ')
     for key in sorted(options):
         print(f'{key} {options[key][0]}')
 
@@ -34,10 +44,6 @@ def execute_option(option, options):
     options[option][1]()
 
 
-def man_material():
-    print('Has elegido la opción 1')
-
-
 def list_material():
     print('Has elegido la opción 2')
 
@@ -50,5 +56,17 @@ def rec_material_input():
     print('Has elegido la opción 4')
 
 
+def add_mat():
+    pass
+
+
+def edit_mat():
+    pass
+
+
+def del_mat():
+    pass
+
+
 def exit_menu():
-    print('Finished system')
+    print('Leaving')
