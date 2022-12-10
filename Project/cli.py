@@ -1,7 +1,12 @@
-from sqlalchemy import insert
+from sqlalchemy import insert, text, update
+from sqlalchemy.orm import sessionmaker
+
 import Database.db as db
 from models.material import Material
 from models.material_movement import MaterialMovement
+
+Session = sessionmaker(bind=db.engine)
+session = Session()
 
 
 def main_menu():
@@ -70,18 +75,36 @@ def add_mat():
     id_material = [letter for letter in name if letter not in 'AEIOU']
     id_material = ''.join(map(str, id_material))
     material = Material(id=id_material, name=name, quantity=quantity, unit_price=unit_price)
-    db.session.add(material)
-    db.session.commit()
+    session.add(material)
+    session.commit()
     return
 
 
 def edit_mat():
-    pass
+    # TODO: create sub menu
+    material_id = input('Insert the material ID: ')
+    q = db.session.query(Material).filter(Material.id == material_id)
+    # Check if the material exist
+
+    if bool(db.session.query(q.exists())) is True:
+        if input('Change quantity? (Y/N): ').upper() == 'Y':
+            new_quantity = int(input('Enter the new quantity: '))
+        if input('Change unit price? (Y/N): ').upper() == 'Y':
+            new_unit_price = int(input('Enter the new unit price: '))
 
 
 def del_mat():
-    pass
+    try:
+        material_id = str(input('Insert the material ID: ')).upper()
+        m = session.query(Material).filter_by(id=material_id).one()
+        session.delete(m)
+        session.commit()
+    except Exception as e:
+        print('The material doesnt exist. Exiting...')
+    return
 
 
 def exit_menu():
     print('Leaving')
+
+# if __name__ == '__main__':
