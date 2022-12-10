@@ -95,7 +95,14 @@ def execute_option(option, options):
 
 
 def list_material():
-    print('Has elegido la opción 2')
+    materials = session.query(Material).all()
+    for material in materials:
+        print ("ID:", material.id)
+        print ("Material:", material.name)
+        print ("Quantity:", material.quantity)
+        print ("Unit Price", material.unit_price)
+    print ("\n")
+    return
 
 
 def rec_material_withdraw():
