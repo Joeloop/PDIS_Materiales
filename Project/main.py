@@ -1,6 +1,7 @@
 import os
 
 from sqlalchemy import Table,Column,Integer,String,MetaData
+from sqlalchemy.orm import Session, sessionmaker
 
 from cli import main_menu
 import Database.db as db
