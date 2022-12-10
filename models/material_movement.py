@@ -1,13 +1,14 @@
 import Database.db as db
-from sqlalchemy import Column, Integer, String, ForeignKey, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, DateTime
+from datetime import datetime
 
 
 class MaterialMovement(db.Base):
     __tablename__ = 'material_movement'
-    id = Column(Integer, primary_key=True)
+    id = Column(String(250), primary_key=True)
     material_id = Column(String(250), ForeignKey("material.id"))
-    quantity = Column(String(250))
-    date = Column(Date)
+    quantity = Column(Integer())
+    date = Column(DateTime(), default=datetime.now())
     movement_type = Column(String(250))
 
     def to_json(self):
