@@ -64,14 +64,15 @@ def rec_material_input():
 
 def add_mat():
     print()
-    name = input('Insert the name: ')
+    name = input('Insert the name: ').upper()
     quantity = int(input('Insert quantity: '))
     unit_price = int(input('Insert unit price: '))
-    material = Material(name, quantity, unit_price)
-    print(material.id)
+    id_material = [letter for letter in name if letter not in 'AEIOU']
+    id_material = ''.join(map(str, id_material))
+    material = Material(id=id_material, name=name, quantity=quantity, unit_price=unit_price)
     db.session.add(material)
     db.session.commit()
-    return 'Product added'
+    return
 
 
 def edit_mat():
