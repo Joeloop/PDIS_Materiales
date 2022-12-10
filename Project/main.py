@@ -1,4 +1,7 @@
 import os
+
+from sqlalchemy import Table,Column,Integer,String,MetaData
+
 from cli import main_menu
 import Database.db as db
 import subprocess
