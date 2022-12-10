@@ -49,6 +49,7 @@ def submenu_edit():
 
 
 def edit_quantity():
+    print()
     try:
         material_id = str(input('Insert the material ID: ')).upper()
         new_quantity = int(input('Insert the new quantity: '))
@@ -63,6 +64,7 @@ def edit_quantity():
 
 
 def edit_unit_price():
+    print()
     try:
         material_id = str(input('Insert the material ID: ')).upper()
         new_price = int(input('Insert the new price: '))
@@ -118,6 +120,7 @@ def add_mat():
 
 
 def del_mat():
+    print()
     try:
         material_id = str(input('Insert the material ID: ')).upper()
         m = session.query(Material).filter_by(id=material_id).one()
