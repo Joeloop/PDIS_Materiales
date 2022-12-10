@@ -1,4 +1,4 @@
-from sqlalchemy import insert, text, update
+from sqlalchemy import insert, text, update, select
 from sqlalchemy.orm import sessionmaker
 
 import Database.db as db
@@ -32,11 +32,48 @@ def generate_menu(name, options, output_option):
 def submenu():
     options = {
         'a': ('Add Material ', add_mat),
-        'b': ('Edit Material', edit_mat),
+        'b': ('Edit Material', submenu_edit),
         'c': ('Delete Mateial', del_mat),
         'd': ('Exit', exit_menu)
     }
     generate_menu('Material Menu', options, 'd')
+
+
+def submenu_edit():
+    options = {
+        '1': ('Edit Quantity', edit_quantity),
+        '2': ('Edit Unit Price', edit_unit_price),
+        '3': ('Exit', exit_menu)
+    }
+    generate_menu('Edit Material Menu', options, '3')
+
+
+def edit_quantity():
+    try:
+        material_id = str(input('Insert the material ID: ')).upper()
+        new_quantity = int(input('Insert the new quantity: '))
+        EditMaterial = session.query(Material).filter_by(id=material_id).one()
+        EditMaterial.quantity = new_quantity
+        session.add(EditMaterial)
+        session.commit()
+    except Exception as e:
+        print(e)
+
+    return
+
+
+def edit_unit_price():
+    try:
+        material_id = str(input('Insert the material ID: ')).upper()
+        new_price = int(input('Insert the new price: '))
+        EditMaterial = session.query(Material).filter_by(id=material_id).one()
+        EditMaterial.unit_price = new_price
+        session.add(EditMaterial)
+        session.commit()
+    except Exception as e:
+        print(e)
+
+    return
 
 
 def show_menu(name, options):
@@ -80,19 +117,6 @@ def add_mat():
     return
 
 
-def edit_mat():
-    # TODO: create sub menu
-    material_id = input('Insert the material ID: ')
-    q = db.session.query(Material).filter(Material.id == material_id)
-    # Check if the material exist
-
-    if bool(db.session.query(q.exists())) is True:
-        if input('Change quantity? (Y/N): ').upper() == 'Y':
-            new_quantity = int(input('Enter the new quantity: '))
-        if input('Change unit price? (Y/N): ').upper() == 'Y':
-            new_unit_price = int(input('Enter the new unit price: '))
-
-
 def del_mat():
     try:
         material_id = str(input('Insert the material ID: ')).upper()
@@ -100,11 +124,11 @@ def del_mat():
         session.delete(m)
         session.commit()
     except Exception as e:
-        print('The material doesnt exist. Exiting...')
+        print(e)
     return
 
 
 def exit_menu():
-    print('Leaving')
+    return
 
 # if __name__ == '__main__':
