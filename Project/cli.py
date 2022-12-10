@@ -107,15 +107,18 @@ def rec_material_input():
 
 
 def add_mat():
-    print()
-    name = input('Insert the name: ').upper()
-    quantity = int(input('Insert quantity: '))
-    unit_price = int(input('Insert unit price: '))
-    id_material = [letter for letter in name if letter not in 'AEIOU']
-    id_material = ''.join(map(str, id_material))
-    material = Material(id=id_material, name=name, quantity=quantity, unit_price=unit_price)
-    session.add(material)
-    session.commit()
+    try:
+        print()
+        name = input('Insert the name: ').upper()
+        quantity = int(input('Insert quantity: '))
+        unit_price = int(input('Insert unit price: '))
+        id_material = [letter for letter in name if letter not in 'AEIOU']
+        id_material = ''.join(map(str, id_material))
+        material = Material(id=id_material, name=name, quantity=quantity, unit_price=unit_price)
+        session.add(material)
+        session.commit()
+    except Exception as e:
+        print(e)
     return
 
 
