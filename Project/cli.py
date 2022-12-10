@@ -2,6 +2,8 @@ from sqlalchemy import insert, text, update, select
 from sqlalchemy.orm import sessionmaker
 
 import Database.db as db
+import random
+import string
 from models.material import Material
 from models.material_movement import MaterialMovement
 
@@ -97,20 +99,69 @@ def execute_option(option, options):
 def list_material():
     materials = session.query(Material).all()
     for material in materials:
-        print ("ID:", material.id)
-        print ("Material:", material.name)
-        print ("Quantity:", material.quantity)
-        print ("Unit Price", material.unit_price)
-    print ("\n")
+        print("ID:", material.id)
+        print("Material:", material.name)
+        print("Quantity:", material.quantity)
+        print("Unit Price", material.unit_price)
+    print("\n")
     return
 
 
 def rec_material_withdraw():
-    print('Has elegido la opción 3')
+    try:
+        mat_id = input('Insert the material ID: ').upper()
+        w_quantity = int(input('Insert the quantity of withdraw: '))
+        if check_withdraw(mat_id, w_quantity):
+            return print('\nThere are not enough materials to remove')
+        addMov = MaterialMovement(
+            id=mat_id + get_random_string(7),
+            material_id=mat_id,
+            quantity=w_quantity,
+            movement_type='WITHDRAW'
+        )
+        session.add(addMov)
+        session.commit()
+    except Exception as e:
+        print(e)
+    return
+
+
+def check_withdraw(id_mat: str, quantity: int) -> bool:
+    try:
+        m = session.query(Material).filter_by(id=id_mat).one()
+        if m.quantity < quantity:
+            return True
+        return False
+    except Exception as e:
+        print(e)
 
 
 def rec_material_input():
-    print('Has elegido la opción 4')
+    try:
+        mat_id = input('Insert the material ID: ').upper()
+        w_quantity = int(input('Enter the amount to input: '))
+        if not check_input(mat_id):
+            material = Material(id=mat_id, name='', quantity=0, unit_price=0)
+            session.add(material)
+            session.commit()
+        addMov = MaterialMovement(
+            id=mat_id + get_random_string(7),
+            material_id=mat_id,
+            quantity=w_quantity,
+            movement_type='INPUT'
+        )
+        session.add(addMov)
+        session.commit()
+    except Exception as e:
+        print(e)
+    return
+
+
+def check_input(id_mat: str) -> bool:
+    exists = session.query(
+        session.query(Material).filter_by(id=id_mat).exists()
+    ).scalar()
+    return exists
 
 
 def add_mat():
@@ -139,6 +190,12 @@ def del_mat():
     except Exception as e:
         print(e)
     return
+
+
+def get_random_string(length):
+    letters = string.ascii_uppercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
 
 
 def exit_menu():
