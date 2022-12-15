@@ -118,7 +118,6 @@ def list_material():
         print("Material:", material.name)
         print("Quantity:", material.quantity)
         print("Unit Price", material.unit_price)
-        print(type(material.to_json()))
     print("\n")
     return
 
