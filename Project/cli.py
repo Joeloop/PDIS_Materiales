@@ -4,14 +4,25 @@ from sqlalchemy.orm import sessionmaker
 import Database.db as db
 import random
 import string
-from Rabbit import Rabbit
 from models.material import Material
 from models.material_movement import MaterialMovement
+import threading
+from Rabbit import Rabbit
+
+
+def background_consume(exchange):
+    messagge_q = Rabbit()
+    messagge_q.consume(exchange)
+
+
+t = threading.Thread(target=background_consume, args=('useOfMaterials',), daemon=True)
+t.start()
 
 Session = sessionmaker(bind=db.engine)
 session = Session()
 
 message_queue = Rabbit()
+
 
 def main_menu():
     options = {
@@ -180,7 +191,6 @@ def add_mat():
         material = Material(id=id_material, name=name, quantity=quantity, unit_price=unit_price)
         session.add(material)
         session.commit()
-        print(material.to_json())
         message_queue.publish(message=material.to_json(), exchange='updateMaterials')
 
     except Exception as e:
