@@ -4,12 +4,14 @@ from sqlalchemy.orm import sessionmaker
 import Database.db as db
 import random
 import string
+from Rabbit import Rabbit
 from models.material import Material
 from models.material_movement import MaterialMovement
 
 Session = sessionmaker(bind=db.engine)
 session = Session()
 
+message_queue = Rabbit()
 
 def main_menu():
     options = {
@@ -59,6 +61,7 @@ def edit_quantity():
         EditMaterial.quantity = new_quantity
         session.add(EditMaterial)
         session.commit()
+        message_queue.publish(message=EditMaterial.to_json(), exchange='updateMaterials')
     except Exception as e:
         print(e)
 
@@ -74,6 +77,7 @@ def edit_unit_price():
         EditMaterial.unit_price = new_price
         session.add(EditMaterial)
         session.commit()
+        message_queue.publish(message=EditMaterial.to_json(), exchange='updateMaterials')
     except Exception as e:
         print(e)
 
@@ -103,6 +107,7 @@ def list_material():
         print("Material:", material.name)
         print("Quantity:", material.quantity)
         print("Unit Price", material.unit_price)
+        print(type(material.to_json()))
     print("\n")
     return
 
@@ -175,8 +180,12 @@ def add_mat():
         material = Material(id=id_material, name=name, quantity=quantity, unit_price=unit_price)
         session.add(material)
         session.commit()
+        print(material.to_json())
+        message_queue.publish(message=material.to_json(), exchange='updateMaterials')
+
     except Exception as e:
         print(e)
+
     return
 
 
@@ -187,6 +196,7 @@ def del_mat():
         m = session.query(Material).filter_by(id=material_id).one()
         session.delete(m)
         session.commit()
+        message_queue.publish(message=m.to_json(), exchange='updateMaterials')
     except Exception as e:
         print(e)
     return

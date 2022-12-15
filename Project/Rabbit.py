@@ -26,7 +26,7 @@ class Rabbit:
         self.channel.basic_consume(
             queue=queue_name, on_message_callback=self.callback, auto_ack=True)
 
-        print(" [*] Started %s exchange" % exchange)
+        # print(" [*] Started %s exchange" % exchange)
         self.channel.start_consuming()
 
     @staticmethod

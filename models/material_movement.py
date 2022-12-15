@@ -15,4 +15,4 @@ class MaterialMovement(db.Base):
     def to_json(self):
         m = {'id': self.id, 'material_id': self.material_id, 'quantity': self.quantity, 'date': self.date,
              'movement_type': self.movement_type}
-        return json.dumps(m, indent=4)
+        return json.dumps(m)

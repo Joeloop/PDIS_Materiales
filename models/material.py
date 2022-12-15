@@ -5,11 +5,11 @@ from sqlalchemy import Column, Integer, String
 
 class Material(db.Base):
     __tablename__ = 'material'
-    id = Column(String(), primary_key=True, )
+    id = Column(String(), primary_key=True)
     name = Column(String(250))
     quantity = Column(Integer())
     unit_price = Column(Integer())
 
     def to_json(self):
-        m = {'id': self.id, 'name': self.name, 'quantity': self.quantity, 'unit_price': self.unit_price}
-        return json.dumps(m, indent=4)
+        m = {'Id': self.id, 'Name': self.name, 'Quantity': self.quantity, 'Price': self.unit_price}
+        return json.dumps(m)
