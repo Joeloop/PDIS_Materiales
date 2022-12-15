@@ -46,7 +46,6 @@ class Rabbit:
     @staticmethod
     def callback(ch, method, properties, body):
         j = json.loads(body)
-        print(j)
         EditMaterial = session.query(Material).filter_by(id=name_to_id(j['MaterialName'])).one()
         EditMaterial.quantity = EditMaterial.quantity - int(j['Quantity'])
         session.add(EditMaterial)
